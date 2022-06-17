@@ -1,0 +1,65 @@
+{
+  "object": "database",
+  "id": "58e434b9-417e-4416-b138-f11eae5071cb",
+  "cover": null,
+  "icon": {
+    "type": "emoji",
+    "emoji": "📘"
+  },
+  "created_time": "2022-06-13T16:37:00.000Z",
+  "created_by": {
+    "object": "user",
+    "id": "1388e0f9-e760-4780-8388-a388e289592b"
+  },
+  "last_edited_by": {
+    "object": "user",
+    "id": "1388e0f9-e760-4780-8388-a388e289592b"
+  },
+  "last_edited_time": "2022-06-13T16:43:00.000Z",
+  "title": [
+    {
+      "type": "text",
+      "text": {
+        "content": "Books ",
+        "link": null
+      },
+      "annotations": {
+        "bold": false,
+        "italic": false,
+        "strikethrough": false,
+        "underline": false,
+        "code": false,
+        "color": "default"
+      },
+      "plain_text": "Books ",
+      "href": null
+    }
+  ],
+  "description": [],
+  "properties": {
+    "Status": {
+      "id": "%5DzEL",
+      "name": "Status",
+      "type": "rich_text",
+      "rich_text": {}
+    },
+    "Value": {
+      "id": "%7BkIz",
+      "name": "Value",
+      "type": "rich_text",
+      "rich_text": {}
+    },
+    "Description": {
+      "id": "title",
+      "name": "Description",
+      "type": "title",
+      "title": {}
+    }
+  },
+  "parent": {
+    "type": "page_id",
+    "page_id": "2f92f825-c1c8-4b71-a7c6-f48d03eb9d8f"
+  },
+  "url": "https://www.notion.so/58e434b9417e4416b138f11eae5071cb",
+  "archived": false
+}
