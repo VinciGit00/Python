@@ -1,18 +1,18 @@
 
-from PYpost.GET import *
-from PYpost.POST import *
-from PYpost.PUT import *
+from POST import *
+from PUT import *
+from GET import *
 
-# Switch for the application
+# Switch case for the application
 
 
 def Match(value):
-    match value:
-        case "1":
-            GETfunction()
-        case "2":
-            PUTFunction()
-        case "3":
-            POSTFunction()
-        case _:
-            print("You have not selected a valid option")
+    a = "3"
+    if(value == "1"):
+        GETfunction()
+    elif(value == "1"):
+        PUTFunction()
+    if(value == "1"):
+        POSTFunction()
+    else:
+        print("You have not selected a valid option")

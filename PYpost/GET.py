@@ -1,8 +1,17 @@
+from urllib import response
+from Parameters import *
+from RequestFunction import *
 import requests
-
 # Function for get procedures
 
 
 def GETfunction():
-    print("hello world")
-    value = input("Enter the URL: \n")
+
+    url = InsertUrl()
+    header = insertHeader()
+    body = insertBody()
+    params = InsertParams()
+
+    response = Requests("GET", url, header, body, params)
+    printResponse(response)
+   
