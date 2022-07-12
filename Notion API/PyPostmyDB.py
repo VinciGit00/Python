@@ -4,9 +4,9 @@ from xxlimited import new
 import requests
 import json
 
-token = 'secret_5w19b4cVlMo4Djag6wslfgWVjgy0HQulpyx9qiMjaJZ'
+token = 'secret_OqxCkOUHuIbghFlcay5ex7lcCbyfYQA7kP0T59CIDfo'
 
-databaseId = '58e434b9417e4416b138f11eae5071cb'
+databaseId = 'a24c2332602a40dd924ac97be03ac946'
 
 header = {
     "Authorization": "Bearer "+token,
@@ -14,7 +14,7 @@ header = {
 }
 
 header2 = {
-    "Authorization": "Bearer secret_5w19b4cVlMo4Djag6wslfgWVjgy0HQulpyx9qiMjaJZ",
+    "Authorization": "Bearer secret_OqxCkOUHuIbghFlcay5ex7lcCbyfYQA7kP0T59CIDfo",
     "Content-Type": "application/json",
     "Notion-Version": "2022-02-22"
 }
@@ -34,7 +34,7 @@ def CreatePage(databaseId, header):
     newPageData = {
         "parent": {"database_id": databaseId},
         "properties": {
-            "Description": {
+            "Name": {
                 "title": [
                     {
                         "text": {
@@ -43,7 +43,7 @@ def CreatePage(databaseId, header):
                     }
                 ]
             },
-            "Value": {
+            "Category": {
                 "rich_text": [
                     {
                         "text": {
@@ -52,7 +52,16 @@ def CreatePage(databaseId, header):
                     }
                 ]
             },
-            "Status": {
+            "Price": {
+                "rich_text": [
+                    {
+                        "text": {
+                            "content": "Giuseppe"
+                        }
+                    }
+                ]
+            },
+            "Date": {
                 "rich_text": [
                     {
                         "text": {
@@ -101,10 +110,10 @@ def updatePage(databaseId, header):
 
 if __name__ == '__main__':
     # Call read
-    readDataBase(databaseId, header)
+    #readDataBase(databaseId, header)
 
     # Call create
-    #CreatePage(databaseId, header2)
+    CreatePage(databaseId, header2)
 
     # This is the Id of the single line
     # call update
