@@ -56,7 +56,7 @@ def CreatePage(databaseId, header):
                 "rich_text": [
                     {
                         "text": {
-                            "content": "Giuseppe"
+                            "content": "120"
                         }
                     }
                 ]
@@ -71,7 +71,6 @@ def CreatePage(databaseId, header):
                 ]
             }
         },
-
     }
 
     data = json.dumps(newPageData)
