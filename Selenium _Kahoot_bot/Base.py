@@ -1,5 +1,17 @@
 from selenium import webdriver
 import time
+from unicodedata import name
+import time
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 
 def kahootbot():
     # MACOS path
@@ -14,6 +26,7 @@ def kahootbot():
     driver.find_element_by_id("game-input").click()
     driver.find_element_by_id("game-input").send_keys("14988")
     driver.find_element_by_css_selector(".sc-jJEJSO").click()
+    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='nickname']"))).send_keys("vinci0000")
     driver.find_element_by_class_name("nickname").click()
     driver.find_element_by_id("nickname").send_keys("vinci00")
     driver.find_element_by_css_selector(".sc-jJEJSO").click()   
