@@ -13,29 +13,33 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
+# Global variables
+# TODO: change every time the code of the kahoot'a game
+code = 330096
+
+
 def kahootbot():
     # MACOS path
-    PATH = "/Users/marcovinciguerra/Github/Python/Selenium _Kahoot_bot/ChromeDriver/chromedriver"    
+    PATH = "/Users/marcovinciguerra/Github/Python/Selenium _Kahoot_bot/ChromeDriver/chromedriver"
 
     driver = webdriver.Chrome(PATH)
     driver.get("https://www.google.com/")
 
     driver.get("https://kahoot.com/")
     driver.set_window_size(1229, 898)
-    driver.find_element_by_css_selector("#menu-item-92364 .menu-item-text").click()
+    driver.find_element_by_css_selector(
+        "#menu-item-92364 .menu-item-text").click()
     driver.find_element_by_id("game-input").click()
-    driver.find_element_by_id("game-input").send_keys("14988")
+    driver.find_element_by_id("game-input").send_keys(code)
     driver.find_element_by_css_selector(".sc-jJEJSO").click()
-    WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//input[@id='nickname']"))).send_keys("vinci0000")
-    driver.find_element_by_class_name("nickname").click()
-    driver.find_element_by_id("nickname").send_keys("vinci00")
-    driver.find_element_by_css_selector(".sc-jJEJSO").click()   
+    WebDriverWait(driver, 20).until(EC.element_to_be_clickable(
+        (By.XPATH, "//input[@id='nickname']"))).send_keys("vinci0000")
+    driver.find_element_by_css_selector(".sc-jJEJSO").click()
     actions = ActionChains(driver)
-
-    actions.move_to_element(element).perform()
 
     time.sleep(2)
     driver.quit()
+
 
 if __name__ == "__main__":
     kahootbot()
