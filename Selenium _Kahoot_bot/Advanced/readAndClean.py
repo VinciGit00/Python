@@ -23,6 +23,7 @@ code = 330096
 
 
 def kahootbot(name):
+    substring = name[2: len(name)-2]
     # MACOS path
     PATH = "/Users/marcovinciguerra/Github/Python/Selenium _Kahoot_bot/ChromeDriver/chromedriver"
 
@@ -37,7 +38,7 @@ def kahootbot(name):
     driver.find_element_by_id("game-input").send_keys(code)
     driver.find_element_by_css_selector(".sc-jJEJSO").click()
     WebDriverWait(driver, 20).until(EC.element_to_be_clickable(
-        (By.XPATH, "//input[@id='nickname']"))).send_keys(str(name))
+        (By.XPATH, "//input[@id='nickname']"))).send_keys(str(substring))
     driver.find_element_by_css_selector(".sc-jJEJSO").click()
     actions = ActionChains(driver)
 
