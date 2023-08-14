@@ -24,6 +24,8 @@ def read(gesture):
         mytext = 'Alexa spegni computer'
     elif(gesture == "Thumb_Up"):
         mytext = "Alexa spegni il display"
+    elif(gesture == "Thumb_Down"):
+        mytext = "Alexa svegliami alle 6 e 50 del mattino"
     elif(gesture == "None"):
         mytext = "Nessuna rilevazione"
     
