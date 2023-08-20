@@ -28,7 +28,7 @@ def main():
             if results.pose_landmarks:
                 # Draw pose landmarks on the frame with red circles and black lines
                 mp_drawing.draw_landmarks(frame, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
-                                          landmark_drawing_spec=mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=5, circle_radius=2),
+                                          landmark_drawing_spec=mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=5, circle_radius=5),
                                           connection_drawing_spec=mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=5))
 
             # Display the resulting frame
