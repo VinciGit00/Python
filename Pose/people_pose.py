@@ -14,7 +14,6 @@ def main():
     cap = cv2.VideoCapture(0)
     cv2.resizeWindow("Resized_Window", 300, 700)
 
-
     # Initialize Mediapipe Pose model
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
 
@@ -27,16 +26,21 @@ def main():
                 count = count + 1
                 if count == 10:
                     array = np.asarray(frame)
-                    print(array.shape)
-                    left, rigth, top, bottom = 0.95*array.shape[0] , 1.05*array.shape[0], 0.25*array.shape[1], 0
-                    cropped_image = array[left:rigth, bottom:top]
+                    left, rigth, top, bottom = int(0.975*array.shape[0]) , int(1.25*array.shape[0]), int(0.05*array.shape[1]), 0
 
-                    pixel_values = np.arange(256)
+                    cropped_array = array[left:rigth, bottom:top]
 
-                    # Map the pixel values in cropped_image to their corresponding quantities in pixel_values
-                    mapped_array = pixel_values[cropped_image]
-                    #TODO: VADO AVANTI DA QUI IN POI
-                    #Qui devo cambiare il colore
+                    # Convert the array to grayscale
+                    gray_array = cv2.cvtColor(cropped_array, cv2.COLOR_BGR2GRAY)
+
+                    # Calculate the average intensity (luminance)
+                    luminance = np.mean(gray_array)
+                    print("Luminance:", luminance)
+
+                    if(luminance < 127):
+                        color = (0, 0, 0)
+                    else: 
+                        color = (255, 255, 255)
 
                     first_image = False
 
@@ -53,7 +57,7 @@ def main():
                 # Draw pose landmarks on the frame with red circles and black lines
                 mp_drawing.draw_landmarks(frame, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                                           landmark_drawing_spec=mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=5, circle_radius=5),
-                                          connection_drawing_spec=mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=5))
+                                          connection_drawing_spec=mp_drawing.DrawingSpec(color=color, thickness=5))
 
             # Display the resulting frame
             cv2.imshow('Pose Detection', frame)
