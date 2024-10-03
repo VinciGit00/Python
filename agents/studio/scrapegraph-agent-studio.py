@@ -7,6 +7,7 @@ from langgraph.graph import MessagesState
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import START, StateGraph
+from langgraph.prebuilt import tools_condition, ToolNode
 
 def _set_env(var: str):
     if not os.environ.get(var):
@@ -93,20 +94,22 @@ llm_with_tools = llm.bind_tools(tools)
 
 sys_msg = SystemMessage(content="You are a helpful assistant tasked with performing scraping scripts with scrapegraphai")
 
+# Node
 def assistant(state: MessagesState):
-    return {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
+   return {"messages": [llm_with_tools.invoke([sys_msg] + state["messages"])]}
 
+# Build graph
 builder = StateGraph(MessagesState)
-memory = MemorySaver()
-react_graph_memory = builder.compile(checkpointer=memory)
+builder.add_node("assistant", assistant)
+builder.add_node("tools", ToolNode(tools))
+builder.add_edge(START, "assistant")
+builder.add_conditional_edges(
+    "assistant",
+    # If the latest message (result) from assistant is a tool call -> tools_condition routes to tools
+    # If the latest message (result) from assistant is a not a tool call -> tools_condition routes to END
+    tools_condition,
+)
+builder.add_edge("tools", "assistant")
 
-# Specify a thread
-config = {"configurable": {"thread_id": "1"}}
-
-# Specify an input
-messages = [HumanMessage(content="Add 3 and 4.")]
-
-# Run
-messages = react_graph_memory.invoke({"messages": messages}, config)
-for m in messages['messages']:
-    m.pretty_print()
+# Compile graph
+graph = builder.compile()
