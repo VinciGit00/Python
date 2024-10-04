@@ -1,6 +1,7 @@
 import os
 import getpass
 import json
+from dotenv import load_dotenv
 from scrapegraphai.graphs import SmartScraperGraph, SearchGraph
 from langchain_openai import ChatOpenAI
 from langgraph.graph import MessagesState
@@ -9,14 +10,7 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import START, StateGraph
 from langgraph.prebuilt import tools_condition, ToolNode
 
-def _set_env(var: str):
-    if not os.environ.get(var):
-        os.environ[var] = getpass.getpass(f"{var}: ")
-
-_set_env("OPENAI_API_KEY")
-_set_env("LANGCHAIN_API_KEY")
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_PROJECT"] = "langchain-academy"
+load_dotenv()
 
 def smart_scraper_func(openai_key: str, prompt: str, source: str):
     """
@@ -34,13 +28,15 @@ def smart_scraper_func(openai_key: str, prompt: str, source: str):
     >>> result = smart_scraper_func('your_openai_key', 'Extract article titles', 'https://example.com')
     >>> print(result)
     """
+    import json
+    from scrapegraphai.graphs import SmartScraperGraph
+
     graph_config = {
         "llm": {
-            "api_key": openai_key,
+            "api_key": os.getenv("OPENAI_API_KEY"),
             "model": "openai/gpt-4o",
         },
         "verbose": True,
-        "headless": False,
     }
 
     smart_scraper_graph = SmartScraperGraph(
@@ -69,9 +65,11 @@ def search_graph_func(key: str, query: str):
     >>> result = search_graph_func('your_openai_key', 'example search')
     >>> print(result)
     """
+    from scrapegraphai.graphs import SearchGraph
+
     graph_config = {
         "llm": {
-            "api_key": key,
+            "api_key": os.getenv("OPENAI_API_KEY"),
             "model": "openai/gpt-4o",
         },
         "max_results": 2,
@@ -88,8 +86,9 @@ def search_graph_func(key: str, query: str):
 
     return result
 
+
 tools = [smart_scraper_func, search_graph_func]
-llm = ChatOpenAI(model="gpt-4o")
+llm = ChatOpenAI(model="gpt-4o", api_key=os.getenv("OPENAI_API_KEY"))
 llm_with_tools = llm.bind_tools(tools)
 
 sys_msg = SystemMessage(content="You are a helpful assistant tasked with performing scraping scripts with scrapegraphai")
