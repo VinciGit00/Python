@@ -12,12 +12,11 @@ from langgraph.prebuilt import tools_condition, ToolNode
 
 load_dotenv()
 
-def smart_scraper_func(openai_key: str, prompt: str, source: str):
+def smart_scraper_func(prompt: str, source: str):
     """
     Performs intelligent scraping using SmartScraperGraph.
 
     Parameters:
-    openai_key (str): The OpenAI API key.
     prompt (str): The prompt to use for scraping.
     source (str): The source from which to perform scraping.
 
@@ -50,7 +49,8 @@ def smart_scraper_func(openai_key: str, prompt: str, source: str):
 
     return result
 
-def search_graph_func(key: str, query: str):
+
+def search_graph_func(query: str):
     """
     Performs a search using SearchGraph.
 
@@ -87,7 +87,40 @@ def search_graph_func(key: str, query: str):
     return result
 
 
-tools = [smart_scraper_func, search_graph_func]
+def script_generator(prompt: str, source: str):
+    """
+    Generates and runs a scraping script using the ScriptCreatorGraph from scrapegraphai.
+
+    Parameters:
+        prompt (str): The prompt to use for scraping.
+        source (str): The source from which to perform scraping.
+    Returns:
+        dict: The result of the scraping process, containing the extracted data.
+    """
+    from scrapegraphai.graphs import ScriptCreatorGraph
+
+    graph_config = {
+        "llm": {
+            "api_key": os.getenv("OPENAI_API_KEY"),
+            "model": "openai/gpt-4o",
+        },
+        "library": "beautifulsoup",
+        "verbose": True,
+        "headless": False,
+    }
+
+    smart_scraper_graph = ScriptCreatorGraph(
+        prompt=prompt,
+        source=source,
+        config=graph_config
+    )
+
+    result = smart_scraper_graph.run()
+    print(result)
+
+    return result
+
+tools = [smart_scraper_func, search_graph_func, script_generator]
 llm = ChatOpenAI(model="gpt-4o", api_key=os.getenv("OPENAI_API_KEY"))
 llm_with_tools = llm.bind_tools(tools)
 
