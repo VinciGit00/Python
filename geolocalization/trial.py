@@ -18,16 +18,14 @@ client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))  # Load API key from enviro
 # Location Processing Function
 ###############################################################################
 def locate_and_offset(
-    photo_filename: Optional[str] = None,
     location_text: Optional[str] = None,
     offset_miles: Optional[float] = None,
     offset_direction: Optional[str] = None
 ) -> dict:
-    """Process location from photo/text and compute optional offset."""
+    """Process location from text and compute optional offset."""
     geolocator = Nominatim(user_agent="streamlit-location-app")
     
     result = {
-        "photo_filename": photo_filename,
         "found_location": None,
         "found_latitude": None,
         "found_longitude": None,
@@ -40,43 +38,53 @@ def locate_and_offset(
     }
 
     # Try to determine location
-    if location_text:
-        loc = geolocator.geocode(location_text)
-        if loc:
-            result.update({
-                "found_location": loc.address,
-                "found_latitude": loc.latitude,
-                "found_longitude": loc.longitude
-            })
-        else:
-            result["error"] = f"Could not geocode: {location_text}"
-            return result
-    elif photo_filename:
-        # For demo, we'll use a fixed location when photo is provided
-        loc = geolocator.geocode("Statue of Liberty")
-        if loc:
-            result.update({
-                "found_location": f"Demo location from photo {photo_filename}",
-                "found_latitude": loc.latitude,
-                "found_longitude": loc.longitude
-            })
-        else:
-            result["error"] = "Could not process photo location"
-            return result
-    else:
+    if not location_text:
         result["error"] = "No location input provided"
+        return result
+
+    loc = geolocator.geocode(location_text)
+    if loc:
+        result.update({
+            "found_location": loc.address,
+            "found_latitude": loc.latitude,
+            "found_longitude": loc.longitude
+        })
+    else:
+        result["error"] = f"Could not geocode: {location_text}"
         return result
 
     # Process offset if requested
     if offset_miles and offset_direction:
+        # Clean up direction input by removing spaces and converting to lowercase
+        cleaned_direction = offset_direction.lower().replace(" ", "").replace("-", "")
+        
         direction_map = {
-            "north": 0.0, "east": 90.0,
-            "south": 180.0, "west": 270.0,
-            # Add more directions as needed
+            "north": 0.0, 
+            "northeast": 45.0,
+            "northeasterly": 45.0,
+            "east": 90.0,
+            "southeast": 135.0,
+            "southeasterly": 135.0,
+            "south": 180.0,
+            "southwest": 225.0,
+            "southwesterly": 225.0,
+            "west": 270.0,
+            "northwest": 315.0,
+            "northwesterly": 315.0,
+            # Abbreviations
+            "n": 0.0,
+            "ne": 45.0,
+            "e": 90.0,
+            "se": 135.0,
+            "s": 180.0,
+            "sw": 225.0,
+            "w": 270.0,
+            "nw": 315.0
         }
-        bearing = direction_map.get(offset_direction.lower())
+
+        bearing = direction_map.get(cleaned_direction)
         if bearing is None:
-            result["error"] = f"Invalid direction: {offset_direction}"
+            result["error"] = f"Invalid direction: {offset_direction}. Please use: north, northeast, east, southeast, south, southwest, west, northwest (or their abbreviations n, ne, e, se, s, sw, w, nw)"
             return result
 
         # Calculate new point
